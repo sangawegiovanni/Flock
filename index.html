@@ -6,6 +6,7 @@
      <title>Flock - Never Head Out Alone</title>
      <link href="https://googleapis.com" rel="stylesheet">
      <link rel="stylesheet" href="style.css">
+     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -45,11 +46,12 @@
                 <h3>Be the first to find a beach crew in Dar</h3>
                 <p class="signup-subtext">We are launching a private beta soon. Join the waitlist to get exclusive early access.</p>
                 
-                <form class="waitlist-form" action="#" method="POST">
-                    <input type="email" placeholder="Enter your email address" required>
-                    <input type="text" placeholder="Your Name">
-                    <button type="submit">Join Waitlist</button>
+                <form id="waitlistForm" class="waitlist-form" action="#" method="POST">
+                    <input type="email" id="userEmail" placeholder="Enter your email address" required>
+                    <input type="text" id="userName" placeholder="Your Name">
+                    <button type="submit" id="submitBtn">Join Waitlist</button>
                 </form>
+                <div id="formResponse" style="display: none; margin-top: 15px;"></div>
             </div>
         </section>
     </main>
@@ -67,6 +69,77 @@
             // Reveal the story and email box
             storyZone.classList.remove('hidden-element');
         }
+        const SUPABASE_URL='https://unllqhzfgngnjxzhwihb.supabase.co';
+        const SUPABASE_ANON_KEY='sb_publishable_aacCEYcKHLIWS5ICEDxQ0Q_1SZO0A7_';
+        
+        console.log("Initializing Supabase client...");
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log("Supabase client initialized:", supabaseClient);
+        
+        document.getElementById('waitlistForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Stop page from refreshing
+            const emailInput = document.getElementById('userEmail').value;
+            const nameInput = document.getElementById('userName').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const responseMsg = document.getElementById('formResponse');
+
+            console.log("Form submitted with:", { email: emailInput, name: nameInput });
+
+            // Visual loading state change
+            submitBtn.innerText = "Joining...";
+            submitBtn.disabled = true;
+
+            try {
+                // Check if email already exists
+                const { data: existingUser, error: checkError } = await supabaseClient
+                    .from('Flock-database')
+                    .select('email')
+                    .eq('email', emailInput)
+                    .single();
+                
+                if (existingUser) {
+                    responseMsg.innerText = "This email is already on the waitlist!";
+                    responseMsg.style.color = "#ff6b35";
+                    responseMsg.style.display = "block";
+                    submitBtn.innerText = "Join Waitlist";
+                    submitBtn.disabled = false;
+                    return;
+                }
+                
+                // Send data directly to your table (Ensure column names match 'email' and 'name' in Supabase)
+                const { error } = await supabaseClient
+                    .from('Flock-database')
+                    .insert([{ email: emailInput, name: nameInput }]);
+                
+                console.log("Supabase response:", error);
+                
+                if (error) {
+                    console.error("Database connection failure:", error.message);
+                    responseMsg.innerText = "Error: " + error.message;
+                    responseMsg.style.color = "#ff4d4d";
+                    responseMsg.style.display = "block";
+                    submitBtn.innerText = "Join Waitlist";
+                    submitBtn.disabled = false;
+                } else {
+                // Success path
+                responseMsg.innerText = "Welcome to the flock! You're on the waitlist.";
+                responseMsg.style.color = "#ff6b35";
+                responseMsg.style.display = "block";
+                
+                // Clear out inputs and update button
+                document.getElementById('userEmail').value = "";
+                document.getElementById('userName').value = "";
+                submitBtn.innerText = "Welcome Aboard ";
+            }
+            } catch (err) {
+                console.error("Unexpected error:", err);
+                responseMsg.innerText = "Error: " + err.message;
+                responseMsg.style.color = "#ff4d4d";
+                responseMsg.style.display = "block";
+                submitBtn.innerText = "Join Waitlist";
+                submitBtn.disabled = false;
+            }
+        });        
     </script>
 
 </body>

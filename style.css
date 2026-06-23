@@ -204,6 +204,20 @@ body {
     transform: translateY(0);
 }
 
+#formResponse {
+    font-family: 'Kalam', cursive;
+    font-size: 1rem;
+    padding: 12px 20px;
+    border-radius: 10px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.waitlist-form button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
     .main-logo {
         font-size: 3.5rem;
