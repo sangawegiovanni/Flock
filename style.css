@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Kalam', cursive;
+    line-height: 1.4;
+    color: #2d2d2d;
+}
+
+/* Landing Page Specific Styles */
+.hero-container {
+    max-width: 900px;
+    margin: -60px auto 0;
+    padding: 30px 15px;
+    position: relative;
+    z-index: 10;
+}
+
+.home-header {
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("Sunset_01.png");
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 15px;
+    position: relative;
+}
+
+.main-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.4);
+    margin-bottom: 5px;
+    letter-spacing: -1px;
+}
+
+.home-tagline {
+    font-family: 'Kalam', cursive;
+    font-size: 1.6rem;
+    color: #fff;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+.brief-intro {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 40px 50px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    text-align: center;
+}
+
+.brief-intro h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #ff6b35;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.brief-sub {
+    font-size: 1.1rem;
+    color: #4a4a4a;
+    margin-bottom: 30px;
+}
+
+.explore-btn {
+    font-family: 'Kalam', cursive;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 18px 40px;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffcc00 100%);
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+}
+
+.explore-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+}
+
+.story-signup-zone {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 40px 50px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+}
+
+.hidden-element {
+    display: none;
+}
+
+.story-box {
+    margin-bottom: 40px;
+}
+
+.story-box p {
+    font-size: 1.1rem;
+    color: #4a4a4a;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.orange-banner {
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffcc00 100%);
+    color: #fff !important;
+    padding: 20px 30px;
+    border-radius: 15px;
+    font-size: 1.2rem !important;
+    font-weight: 500;
+    font-style: italic;
+    text-align: center !important;
+    margin: 25px 0 !important;
+    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.25);
+}
+
+.signup-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 40px 50px;
+    margin-top: 30px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(10px);
+    text-align: center;
+}
+
+.signup-container h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: #ff6b35;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.signup-subtext {
+    font-family: 'Kalam', cursive;
+    font-size: 1.1rem;
+    color: #4a4a4a;
+    margin-bottom: 25px;
+}
+
+.waitlist-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.waitlist-form input {
+    font-family: 'Kalam', cursive;
+    font-size: 1rem;
+    padding: 15px 20px;
+    border: 2px solid #ffe4d1;
+    border-radius: 12px;
+    background: #fff;
+    color: #2d2d2d;
+    transition: all 0.3s ease;
+}
+
+.waitlist-form input:focus {
+    outline: none;
+    border-color: #ff6b35;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.waitlist-form button {
+    font-family: 'Kalam', cursive;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffcc00 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+}
+
+.waitlist-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(255, 107, 53, 0.4);
+}
+
+.waitlist-form button:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .main-logo {
+        font-size: 3.5rem;
+    }
+    
+    .home-tagline {
+        font-size: 1.2rem;
+    }
+    
+    .hero-container {
+        padding: 30px 15px;
+    }
+    
+    .brief-intro,
+    .story-signup-zone {
+        padding: 30px 25px;
+    }
+    
+    .brief-intro h2 {
+        font-size: 1.5rem;
+    }
+    
+    .story-box p {
+        font-size: 1rem;
+    }
+    
+    .orange-banner {
+        font-size: 1rem !important;
+        padding: 15px 20px;
+    }
+    
+    .signup-container {
+        padding: 30px 25px;
+    }
+    
+    .signup-container h3 {
+        font-size: 1.5rem;
+    }
+    
+    .waitlist-form {
+        max-width: 100%;
+    }
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Flock - Never Head Out Alone</title>
+     <link href="https://googleapis.com" rel="stylesheet">
+     <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="home-header">
+        <h1 class="main-logo">Flock</h1>
+        <p class="home-tagline">Never head out Alone</p>
+    </header>
+
+    <!-- GLOBAL CONTAINER (Everything stays locked inside this blurred view) -->
+    <main class="hero-container">
+
+        <!-- ZONE 1: THE BRIEF INTRO (Visible by default) -->
+        <section id="intro-zone" class="brief-intro">
+            <h2>Find your crew for your next beach trip, cafe run, or adventure in Dar.</h2>
+            <p class="brief-sub">Skip the awkward small talk. Match on plans, meet in public, and explore the city together.</p>
+            
+            <!-- CHANGED: Instead of linking to a new page, it calls our JavaScript function -->
+            <button onclick="showStory()" class="explore-btn">See How It Works</button>
+        </section>
+
+        <!-- ZONE 2: THE STORY & SIGNUP (Hidden by default using CSS) -->
+        <section id="story-zone" class="story-signup-zone hidden-element">
+            <div class="story-box">
+                <p>Imagine you're sitting in your small room in Kijitonyama, the hum of the city outside your window, the smell of pilau drifting from a neighbor's kitchen. You just finished another long day of lectures, and all you have is the quiet. The same quiet that's been there since you moved to Dar—since the bus ride from your village, since the first time you walked into campus and felt like everyone already knew each other except you.</p>
+
+                <p>You scroll. You swipe. You send a message that disappears into nowhere. The group chats on your floor buzz with plans you weren't invited to. You think about Mbweni Beach, how you've wanted to see the sunset there, but the thought of going alone makes your chest tight.</p>
+
+                <p class="orange-banner">Then a post appears: "Mbweni Beach, 4 PM, sunset. Anyone want to come?"</p>
+
+                <p>You click join before you can think twice. An hour later, you're there. The sand is warm beneath your feet. The water is gold. And there's someone there—smiling, not judging, just there. You ask about your course. You ask about theirs. You laugh about the same broken bus routes, the same crowded lunch lines, the same feeling of being new in a city that moves fast.</p>
+
+                <p>The sun dips. The sky turns. And for the first time, the quiet isn't there. You don't have to wait for someone to find you. You don't have to be the one who's always alone. Post your plan. Join someone's. Somewhere in Dar, someone else is waiting for exactly this—someone to share the sunset with.</p>
+            </div>
+
+            <!-- THE SIGNUP CAPTURE ZONE -->
+            <div class="signup-container">
+                <h3>Be the first to find a beach crew in Dar</h3>
+                <p class="signup-subtext">We are launching a private beta soon. Join the waitlist to get exclusive early access.</p>
+                
+                <form class="waitlist-form" action="#" method="POST">
+                    <input type="email" placeholder="Enter your email address" required>
+                    <input type="text" placeholder="Your Name">
+                    <button type="submit">Join Waitlist</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- INTERACTIVE JAVASCRIPT: Switches the content without refreshing the page -->
+    <script>
+        function showStory() {
+            // Find both zones
+            const introZone = document.getElementById('intro-zone');
+            const storyZone = document.getElementById('story-zone');
+            
+            // Hide the intro text and button
+            introZone.style.display = 'none';
+            
+            // Reveal the story and email box
+            storyZone.classList.remove('hidden-element');
+        }
+    </script>
+
+</body>
+</html>
