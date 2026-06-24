@@ -4,7 +4,7 @@
 //    - Virtual restaurant (Waterfront) with menu & join
 //    - Virtual beach event (Mbweni Sunset) with attendees
 //    - Virtual hackathon event (UDSM Hackathon) with attendees
-//    - Virtual job interview (Posta) with attendees   ← NEW
+//    - Virtual job interview (Posta) with attendees
 // ============================================================
 
 async function showMap() {
@@ -132,7 +132,7 @@ async function showMap() {
     };
 
     // ============================================================
-    //  VIRTUAL DEMO: JOB INTERVIEW at POSTA  ← NEW
+    //  VIRTUAL DEMO: JOB INTERVIEW at POSTA
     // ============================================================
     const DEMO_JOB_INTERVIEW = {
       name: '💼 Job Interview – Posta',
@@ -162,7 +162,7 @@ async function showMap() {
         label: 'Beach',
         emoji: '🏖️',
         color: '#ff6b35',
-        query: `[out:json][timeout:30];
+        query: `[out:json][timeout:60];  // Increased timeout to 60s
           (
             node["natural"="beach"](${DAR_BBOX});
             way["natural"="beach"](${DAR_BBOX});
@@ -179,7 +179,7 @@ async function showMap() {
         label: 'Food',
         emoji: '🍽️',
         color: '#f7931e',
-        query: `[out:json][timeout:30];
+        query: `[out:json][timeout:60];
           (
             node["amenity"="restaurant"](${DAR_BBOX});
             way["amenity"="restaurant"](${DAR_BBOX});
@@ -194,7 +194,7 @@ async function showMap() {
         label: 'Cafe',
         emoji: '☕',
         color: '#ffaa5c',
-        query: `[out:json][timeout:30];
+        query: `[out:json][timeout:60];
           (
             node["amenity"="cafe"](${DAR_BBOX});
             way["amenity"="cafe"](${DAR_BBOX});
@@ -209,7 +209,7 @@ async function showMap() {
         label: 'Parks',
         emoji: '🌳',
         color: '#4caf7d',
-        query: `[out:json][timeout:30];
+        query: `[out:json][timeout:60];
           (
             node["leisure"="park"](${DAR_BBOX});
             way["leisure"="park"](${DAR_BBOX});
@@ -224,7 +224,7 @@ async function showMap() {
         label: 'Explore',
         emoji: '🏛️',
         color: '#e85d26',
-        query: `[out:json][timeout:30];
+        query: `[out:json][timeout:60];
           (
             node["tourism"="museum"](${DAR_BBOX});
             way["tourism"="museum"](${DAR_BBOX});
@@ -249,98 +249,96 @@ async function showMap() {
 
     // ============================================================
     //  FETCH FROM OVERPASS PROXY (Vercel serverless function)
+    //  WITH RETRY AND FALLBACK TO DEMO ITEMS
     // ============================================================
     async function fetchPlaces(categoryKey) {
       const cat = categories[categoryKey];
 
-      try {
-        // ✅ Call your Vercel proxy instead of Overpass directly
+      // Helper to make the actual proxy request
+      const callProxy = async () => {
         const response = await fetch('/api/overpass', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ query: cat.query }),
         });
-
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(`Proxy error: ${errorData.error || response.status}`);
         }
-
         const data = await response.json();
-
         if (data.remark && data.remark.toLowerCase().includes('error')) {
           throw new Error(data.remark);
         }
+        return data;
+      };
 
-        const seen = new Set();
-        const results = [];
-
-        for (const el of data.elements) {
-          const lon = el.type === 'way' || el.type === 'relation' ? el.center?.lon : el.lon;
-          const lat = el.type === 'way' || el.type === 'relation' ? el.center?.lat : el.lat;
-          if (!lon || !lat) continue;
-
-          const uniqueKey = `${el.type}-${el.id}`;
-          if (seen.has(uniqueKey)) continue;
-          seen.add(uniqueKey);
-
-          const name =
-            el.tags?.name ||
-            el.tags?.['name:en'] ||
-            el.tags?.name_sw ||
-            `${cat.label} spot`;
-
-          results.push({
-            name: name,
-            coords: [lon, lat],
-            tags: el.tags || {},
-          });
+      let data;
+      let attempt = 0;
+      const maxAttempts = 2;
+      while (attempt < maxAttempts) {
+        try {
+          data = await callProxy();
+          break; // success
+        } catch (err) {
+          attempt++;
+          console.warn(`Overpass attempt ${attempt} failed: ${err.message}`);
+          if (attempt >= maxAttempts) {
+            // After all attempts fail, throw so we fall back to demo-only
+            throw err;
+          }
+          // Wait 1 second before retrying
+          await new Promise(resolve => setTimeout(resolve, 1000));
         }
-
-        // ============================================================
-        //  INJECT DEMO ITEMS into respective categories
-        // ============================================================
-        if (categoryKey === 'food') {
-          results.unshift({
-            name: DEMO_RESTAURANT.name,
-            coords: DEMO_RESTAURANT.coords,
-            tags: DEMO_RESTAURANT.tags,
-            isDemo: true,
-          });
-        }
-
-        if (categoryKey === 'beach') {
-          results.unshift({
-            name: DEMO_EVENT.name,
-            coords: DEMO_EVENT.coords,
-            tags: DEMO_EVENT.tags,
-            isDemoEvent: true,
-          });
-        }
-
-        if (categoryKey === 'explore') {
-          // Inject both Hackathon and Job Interview (order: interview first, then hackathon)
-          results.unshift({
-            name: DEMO_JOB_INTERVIEW.name,
-            coords: DEMO_JOB_INTERVIEW.coords,
-            tags: DEMO_JOB_INTERVIEW.tags,
-            isDemoEvent: true,
-          });
-          results.unshift({
-            name: DEMO_HACKATHON.name,
-            coords: DEMO_HACKATHON.coords,
-            tags: DEMO_HACKATHON.tags,
-            isDemoEvent: true,
-          });
-        }
-
-        return results.slice(0, 20);
-      } catch (err) {
-        console.error('Overpass fetch error:', err);
-        throw err;
       }
+
+      // If we have data, process it
+      const seen = new Set();
+      const results = [];
+      for (const el of data.elements) {
+        const lon = el.type === 'way' || el.type === 'relation' ? el.center?.lon : el.lon;
+        const lat = el.type === 'way' || el.type === 'relation' ? el.center?.lat : el.lat;
+        if (!lon || !lat) continue;
+        const uniqueKey = `${el.type}-${el.id}`;
+        if (seen.has(uniqueKey)) continue;
+        seen.add(uniqueKey);
+        const name = el.tags?.name || el.tags?.['name:en'] || el.tags?.name_sw || `${cat.label} spot`;
+        results.push({ name, coords: [lon, lat], tags: el.tags || {} });
+      }
+
+      // Inject demo items
+      if (categoryKey === 'food') {
+        results.unshift({
+          name: DEMO_RESTAURANT.name,
+          coords: DEMO_RESTAURANT.coords,
+          tags: DEMO_RESTAURANT.tags,
+          isDemo: true,
+        });
+      }
+      if (categoryKey === 'beach') {
+        results.unshift({
+          name: DEMO_EVENT.name,
+          coords: DEMO_EVENT.coords,
+          tags: DEMO_EVENT.tags,
+          isDemoEvent: true,
+        });
+      }
+      if (categoryKey === 'explore') {
+        // Add Job Interview first, then Hackathon
+        results.unshift({
+          name: DEMO_JOB_INTERVIEW.name,
+          coords: DEMO_JOB_INTERVIEW.coords,
+          tags: DEMO_JOB_INTERVIEW.tags,
+          isDemoEvent: true,
+        });
+        results.unshift({
+          name: DEMO_HACKATHON.name,
+          coords: DEMO_HACKATHON.coords,
+          tags: DEMO_HACKATHON.tags,
+          isDemoEvent: true,
+        });
+      }
+
+      return results.slice(0, 20);
     }
 
     // ============================================================
@@ -355,7 +353,7 @@ async function showMap() {
         </div>`
       ).join('');
 
-      // Determine location label based on coords or name
+      // Determine location label based on name
       let locationLabel = 'Dar es Salaam';
       if (place.name.includes('Mbweni')) locationLabel = 'Mbweni Beach';
       else if (place.name.includes('UDSM') || place.name.includes('Hackathon')) locationLabel = 'UDSM';
@@ -545,7 +543,6 @@ async function showMap() {
           displayName = `${place.name} ${i + 1}`;
         }
 
-        // Determine location label
         let location = 'Dar es Salaam';
         if (place.isDemoEvent) {
           if (place.name.includes('Mbweni')) location = 'Mbweni Beach';
@@ -591,11 +588,61 @@ async function showMap() {
         renderSidebar(places, categoryKey);
       } catch (err) {
         console.error('Failed to load places:', err);
-        document.getElementById('flock-plans-list').innerHTML = `
-          <div style="text-align:center;color:#ff6b35;padding:30px 10px;font-size:0.82rem">
-            ⚠️ Could not load spots.<br>
-            <span style="font-size:0.7rem;color:#a09088">${err.message}</span>
-          </div>`;
+        // Fallback: try to load only demo items
+        try {
+          const fallbackPlaces = [];
+          if (categoryKey === 'food') {
+            fallbackPlaces.push({
+              name: DEMO_RESTAURANT.name,
+              coords: DEMO_RESTAURANT.coords,
+              tags: DEMO_RESTAURANT.tags,
+              isDemo: true,
+            });
+          }
+          if (categoryKey === 'beach') {
+            fallbackPlaces.push({
+              name: DEMO_EVENT.name,
+              coords: DEMO_EVENT.coords,
+              tags: DEMO_EVENT.tags,
+              isDemoEvent: true,
+            });
+          }
+          if (categoryKey === 'explore') {
+            fallbackPlaces.push({
+              name: DEMO_JOB_INTERVIEW.name,
+              coords: DEMO_JOB_INTERVIEW.coords,
+              tags: DEMO_JOB_INTERVIEW.tags,
+              isDemoEvent: true,
+            });
+            fallbackPlaces.push({
+              name: DEMO_HACKATHON.name,
+              coords: DEMO_HACKATHON.coords,
+              tags: DEMO_HACKATHON.tags,
+              isDemoEvent: true,
+            });
+          }
+          if (fallbackPlaces.length > 0) {
+            addMarkers(fallbackPlaces, categoryKey);
+            renderSidebar(fallbackPlaces, categoryKey);
+            document.getElementById('flock-plans-list').innerHTML = `
+              <div style="text-align:center;color:#b0a098;padding:10px;font-size:0.75rem;background:rgba(255,107,53,0.1);border-radius:8px;margin-bottom:10px;">
+                ⚠️ Live data unavailable — showing demo spots only
+              </div>
+            ` + document.getElementById('flock-plans-list').innerHTML;
+          } else {
+            document.getElementById('flock-plans-list').innerHTML = `
+              <div style="text-align:center;color:#ff6b35;padding:30px 10px;font-size:0.82rem">
+                ⚠️ Could not load spots. Try again later.
+                <br><span style="font-size:0.7rem;color:#a09088">${err.message}</span>
+              </div>`;
+          }
+        } catch (fallbackErr) {
+          document.getElementById('flock-plans-list').innerHTML = `
+            <div style="text-align:center;color:#ff6b35;padding:30px 10px;font-size:0.82rem">
+              ⚠️ Could not load spots. Try again later.
+              <br><span style="font-size:0.7rem;color:#a09088">${err.message}</span>
+            </div>`;
+        }
       }
     }
 
@@ -800,7 +847,7 @@ async function showMap() {
     console.log('  🍽️  The Waterfront Restaurant (Food category)');
     console.log('  🌅  Mbweni Beach Sunset Gathering (Beach category)');
     console.log('  💻  UDSM Hackathon 2026 (Explore category)');
-    console.log('  💼  Job Interview – Posta (Explore category)');  // ← NEW
+    console.log('  💼  Job Interview – Posta (Explore category)');
   } catch (err) {
     console.error('❌ Flock map failed:', err);
   }
