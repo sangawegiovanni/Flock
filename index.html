@@ -1,398 +1,148 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flock - Never Head Out Alone</title><link rel="stylesheet" href="style.css">
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Flock - Never Head Out Alone</title>
+     <link href="https://googleapis.com" rel="stylesheet">
+     <link rel="stylesheet" href="style.css">
+     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body><!-- NAVIGATION -->
+<body>
 
-<header class="navbar">
+    <header class="home-header">
+        <h1 class="main-logo">Flock</h1>
+        <p class="home-tagline">Never head out Alone</p>
+    </header>
 
-    <div class="logo">
-        FLOCK
-    </div>
+    <!-- GLOBAL CONTAINER (Everything stays locked inside this blurred view) -->
+    <main class="hero-container">
 
-    <button class="nav-btn" onclick="scrollToWaitlist()">
-        Join Waitlist
-    </button>
-
-</header>
-
-<!-- HERO SECTION -->
-
-<section class="hero">
-
-    <div class="hero-left">
-
-        <span class="launch-badge">
-            Launching Soon In Dar es Salaam
-        </span>
-
-        <h1>
-            Never Head Out Alone
-        </h1>
-
-        <p class="hero-text">
-            Find people who already want to do the same things you do.
-
-            Whether it's a study session, beach trip, football match,
-            gym workout, coffee run, or city adventure,
-            Flock helps you find your crew.
-        </p>
-
-        <div class="hero-buttons">
-
-            <button
-                class="primary-btn"
-                onclick="scrollToWaitlist()">
-                Join The Waitlist
-            </button>
-
-            <button
-                class="secondary-btn"
-                onclick="scrollToExamples()">
-                See Examples
-            </button>
-
-        </div>
-
-        <p class="hero-proof">
-            Join early and help shape the future of real-world social connection.
-        </p>
-
-    </div>
-
-    <div class="hero-right">
-
-        <img
-            src="hero.jpg"
-            alt="Friends enjoying activities together">
-
-    </div>
-
-</section>
-
-<!-- EXAMPLES -->
-
-<section
-    id="examples-section"
-    class="examples-section">
-
-    <h2>
-        What Can You Use Flock For?
-    </h2>
-
-    <div class="example-grid">
-
-        <div class="example-card">
-            <h3>📚 Study Sessions</h3>
-            <p>
-                Find students who want to revise,
-                prepare for exams,
-                or work on projects together.
+        <!-- ZONE 1: THE BRIEF INTRO (Visible by default) -->
+        <section id="intro-zone" class="brief-intro">
+            <h2>Find your crew for your next beach trip, cafe run, or adventure in Dar.</h2>
+            <p class="brief-sub">Skip the awkward small talk. Match on plans, meet in public, and explore the city together.
+                <br>This site helps you connect with people who share your interests and want to do activities together.                
             </p>
-        </div>
-
-        <div class="example-card">
-            <h3>☕ Coffee Runs</h3>
-            <p>
-                Grab coffee with someone nearby
-                instead of sitting alone.
-            </p>
-        </div>
-
-        <div class="example-card">
-            <h3>🏖 Beach Trips</h3>
-            <p>
-                Join people heading to the beach
-                for sunsets and weekend adventures.
-            </p>
-        </div>
-
-        <div class="example-card">
-            <h3>⚽ Football Matches</h3>
-            <p>
-                Watch games with fans who support
-                your team.
-            </p>
-        </div>
-
-        <div class="example-card">
-            <h3>🏋 Gym Partners</h3>
-            <p>
-                Stay motivated and train together.
-            </p>
-        </div>
-
-        <div class="example-card">
-            <h3>🌆 Explore The City</h3>
-            <p>
-                Discover restaurants,
-                events,
-                and hidden spots in Dar.
-            </p>
-        </div>
-
-    </div>
-
-</section>
-
-<!-- HOW IT WORKS -->
-
-<section class="how-it-works">
-
-    <h2>
-        How Flock Works
-    </h2>
-
-    <div class="steps">
-
-        <div class="step-card">
-            <span>01</span>
-
-            <h3>
-                Post A Plan
-            </h3>
-
-            <p>
-                Going somewhere?
-                Create a plan in seconds.
-            </p>
-        </div>
-
-        <div class="step-card">
-
-            <span>02</span>
-
-            <h3>
-                Find People
-            </h3>
-
-            <p>
-                Others nearby can discover
-                and join your activity.
-            </p>
-
-        </div>
-
-        <div class="step-card">
-
-            <span>03</span>
-
-            <h3>
-                Go Together
-            </h3>
-
-            <p>
-                Meet in public places and
-                enjoy the experience.
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- STORY SECTION -->
-
-<section class="story-section">
-
-    <h2>
-        Because Great Plans Shouldn't Die In Your Head
-    </h2>
-
-    <p>
-        Every day people skip trips,
-        events,
-        study sessions,
-        restaurants,
-        and adventures because they
-        don't have someone to go with.
-    </p>
-
-    <p>
-        Not because they aren't interested.
-        Not because nobody else wants to go.
-    </p>
-
-    <p>
-        They simply never found each other.
-    </p>
-
-    <p class="story-highlight">
-        Flock helps people connect through activities,
-        not endless swiping.
-    </p>
-
-</section>
-
-<!-- WAITLIST -->
-
-<section
-    id="waitlist-section"
-    class="waitlist-section">
-
-    <div class="waitlist-box">
-
-        <h2>
-            Join The Private Beta
-        </h2>
-
-        <p>
-            Be among the first people
-            to experience Flock in Dar es Salaam.
-        </p>
-
-        <form id="waitlistForm">
-
-            <input
-                type="text"
-                id="userName"
-                placeholder="Your Name">
-
-            <input
-                type="email"
-                id="userEmail"
-                placeholder="Your Email Address"
-                required>
-
-            <button
-                type="submit"
-                id="submitBtn">
-
-                Join Waitlist
-
-            </button>
-
-        </form>
-
-        <div id="formResponse"></div>
-
-    </div>
-
-</section>
-
-<!-- FOOTER -->
-
-<footer>
-
-    <h3>FLOCK</h3>
-
-    <p>
-        Never Head Out Alone
-    </p>
-
-</footer>
-
-<!-- JAVASCRIPT -->
-
-<script>
-
-    function scrollToExamples() {
-
-        document
-            .getElementById("examples-section")
-            .scrollIntoView({
-                behavior: "smooth"
-            });
-
-    }
-
-    function scrollToWaitlist() {
-
-        document
-            .getElementById("waitlist-section")
-            .scrollIntoView({
-                behavior: "smooth"
-            });
-
-    }
-
-    const SUPABASE_URL =
-    "YOUR_SUPABASE_URL";
-
-    const SUPABASE_ANON_KEY =
-    "YOUR_SUPABASE_ANON_KEY";
-
-    const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-    );
-
-    document
-    .getElementById("waitlistForm")
-    .addEventListener(
-        "submit",
-        async function(e){
-
-        e.preventDefault();
-
-        const email =
-        document
-        .getElementById("userEmail")
-        .value;
-
-        const name =
-        document
-        .getElementById("userName")
-        .value;
-
-        const response =
-        document
-        .getElementById("formResponse");
-
-        const submitBtn =
-        document
-        .getElementById("submitBtn");
-
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Joining...";
-
-        const { error } =
-        await supabaseClient
-        .from("Flock-database")
-        .insert([
-            {
-                email: email,
-                name: name
-            }
-        ]);
-
-        if(error){
-
-            response.innerText =
-            "Something went wrong.";
-
-            submitBtn.disabled = false;
-            submitBtn.innerText =
-            "Join Waitlist";
-
-        }else{
-
-            response.innerText =
-            "Welcome to Flock. You're officially on the waitlist.";
-
-            document
-            .getElementById("userEmail")
-            .value = "";
-
-            document
-            .getElementById("userName")
-            .value = "";
-
-            submitBtn.innerText =
-            "Welcome Aboard";
-
+            
+            <!-- CHANGED: Instead of linking to a new page, it calls our JavaScript function -->
+            <button onclick="showStory()" class="explore-btn">See How It Works</button>
+        </section>
+
+        <!-- ZONE 2: THE STORY & SIGNUP (Hidden by default using CSS) -->
+        <section id="story-zone" class="story-signup-zone hidden-element">
+            <div class="story-box">
+                <p>Imagine you're sitting in your small room in Kijitonyama, the hum of the city outside your window, the smell of pilau drifting from a neighbor's kitchen. You just finished another long day of lectures, and all you have is the quiet. The same quiet that's been there since you moved to Dar—since the bus ride from your village, since the first time you walked into campus and felt like everyone already knew each other except you.</p>
+
+                <p>You scroll. You swipe. You send a message that disappears into nowhere. The group chats on your floor buzz with plans you weren't invited to. You think about Mbweni Beach, how you've wanted to see the sunset there, but the thought of going alone makes your chest tight.</p>
+
+                <p class="orange-banner">Then a post appears: "Mbweni Beach, 4 PM, sunset. Anyone want to come?"</p>
+
+                <p>You click join before you can think twice. An hour later, you're there. The sand is warm beneath your feet. The water is gold. And there's someone there—smiling, not judging, just there. You ask about your course. You ask about theirs. You laugh about the same broken bus routes, the same crowded lunch lines, the same feeling of being new in a city that moves fast.</p>
+
+                <p>The sun dips. The sky turns. And for the first time, the quiet isn't there. You don't have to wait for someone to find you. You don't have to be the one who's always alone. Post your plan. Join someone's. Somewhere in Dar, someone else is waiting for exactly this—someone to share the sunset with.</p>
+            </div>
+
+            <!-- THE SIGNUP CAPTURE ZONE -->
+            <div class="signup-container">
+                <h3>Be the first to find a beach crew in Dar</h3>
+                <p class="signup-subtext">We are launching a private beta soon. Join the waitlist to get exclusive early access.</p>
+                
+                <form id="waitlistForm" class="waitlist-form" action="#" method="POST">
+                    <input type="email" id="userEmail" placeholder="Enter your email address" required>
+                    <input type="text" id="userName" placeholder="Your Name">
+                    <button type="submit" id="submitBtn">Join Waitlist</button>
+                </form>
+                <div id="formResponse" style="display: none; margin-top: 15px;"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- INTERACTIVE JAVASCRIPT: Switches the content without refreshing the page -->
+    <script>
+        function showStory() {
+            // Find both zones
+            const introZone = document.getElementById('intro-zone');
+            const storyZone = document.getElementById('story-zone');
+            
+            // Hide the intro text and button
+            introZone.style.display = 'none';
+            
+            // Reveal the story and email box
+            storyZone.classList.remove('hidden-element');
         }
+        const SUPABASE_URL='https://unllqhzfgngnjxzhwihb.supabase.co';
+        const SUPABASE_ANON_KEY='sb_publishable_aacCEYcKHLIWS5ICEDxQ0Q_1SZO0A7_';
+        
+        console.log("Initializing Supabase client...");
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log("Supabase client initialized:", supabaseClient);
+        
+        document.getElementById('waitlistForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Stop page from refreshing
+            const emailInput = document.getElementById('userEmail').value;
+            const nameInput = document.getElementById('userName').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const responseMsg = document.getElementById('formResponse');
 
-    });
+            console.log("Form submitted with:", { email: emailInput, name: nameInput });
 
-</script>
+            // Visual loading state change
+            submitBtn.innerText = "Joining...";
+            submitBtn.disabled = true;
+
+            try {
+                // Check if email already exists
+                const { data: existingUser, error: checkError } = await supabaseClient
+                    .from('Flock-database')
+                    .select('email')
+                    .eq('email', emailInput)
+                    .single();
+                
+                if (existingUser) {
+                    responseMsg.innerText = "This email is already on the waitlist!";
+                    responseMsg.style.color = "#ff6b35";
+                    responseMsg.style.display = "block";
+                    submitBtn.innerText = "Join Waitlist";
+                    submitBtn.disabled = false;
+                    return;
+                }
+                
+                // Send data directly to your table (Ensure column names match 'email' and 'name' in Supabase)
+                const { error } = await supabaseClient
+                    .from('Flock-database')
+                    .insert([{ email: emailInput, name: nameInput }]);
+                
+                console.log("Supabase response:", error);
+                
+                if (error) {
+                    console.error("Database connection failure:", error.message);
+                    responseMsg.innerText = "Error: " + error.message;
+                    responseMsg.style.color = "#ff4d4d";
+                    responseMsg.style.display = "block";
+                    submitBtn.innerText = "Join Waitlist";
+                    submitBtn.disabled = false;
+                } else {
+                // Success path
+                responseMsg.innerText = "Welcome to the flock! You're on the waitlist.";
+                responseMsg.style.color = "#ff6b35";
+                responseMsg.style.display = "block";
+                
+                // Clear out inputs and update button
+                document.getElementById('userEmail').value = "";
+                document.getElementById('userName').value = "";
+                submitBtn.innerText = "Welcome Aboard ";
+            }
+            } catch (err) {
+                console.error("Unexpected error:", err);
+                responseMsg.innerText = "Error: " + err.message;
+                responseMsg.style.color = "#ff4d4d";
+                responseMsg.style.display = "block";
+                submitBtn.innerText = "Join Waitlist";
+                submitBtn.disabled = false;
+            }
+        });        
+    </script>
 
 </body>
 </html>
