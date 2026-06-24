@@ -3,6 +3,8 @@
 //  Includes:
 //    - Virtual restaurant (Waterfront) with menu & join
 //    - Virtual beach event (Mbweni Sunset) with attendees
+//    - Virtual hackathon event (UDSM Hackathon) with attendees
+//    - Virtual job interview (Posta) with attendees   ← NEW
 // ============================================================
 
 async function showMap() {
@@ -107,6 +109,50 @@ async function showMap() {
     };
 
     // ============================================================
+    //  VIRTUAL DEMO: HACKATHON EVENT with ATTENDEES
+    // ============================================================
+    const DEMO_HACKATHON = {
+      name: '💻 UDSM Hackathon 2026',
+      coords: [39.222, -6.830], // University of Dar es Salaam area
+      tags: {
+        event: 'Hackathon',
+        time: '9 AM – 6 PM',
+        date: 'Saturday, 4 July 2026',
+        description: 'Build something amazing! Collaborate with other tech enthusiasts to solve real-world problems.',
+        attendees: [
+          { name: 'David K.', emoji: '👤' },
+          { name: 'Grace M.', emoji: '👤' },
+          { name: 'James T.', emoji: '👤' },
+          { name: 'Amina H.', emoji: '👤' },
+          { name: 'Brian O.', emoji: '👤' },
+        ],
+        activity: '💻 Coding • 🧠 Workshops • 🍕 Lunch • 🏆 Prizes',
+      },
+      isDemoEvent: true,
+    };
+
+    // ============================================================
+    //  VIRTUAL DEMO: JOB INTERVIEW at POSTA  ← NEW
+    // ============================================================
+    const DEMO_JOB_INTERVIEW = {
+      name: '💼 Job Interview – Posta',
+      coords: [39.285, -6.815], // Posta area, Dar es Salaam
+      tags: {
+        event: 'Job Interview',
+        time: '10 AM – 12 PM',
+        date: 'Monday, 20 July 2026',
+        description: 'Exciting opportunity! Interview for a software developer role at a leading tech company. Prepare to showcase your skills.',
+        attendees: [
+          { name: 'Hiring Manager', emoji: '👔' },
+          { name: 'Tech Lead', emoji: '👨‍💻' },
+          { name: 'HR Rep', emoji: '👩‍💼' },
+        ],
+        activity: '💼 Job Interview • 📝 Assessment • ☕ Networking',
+      },
+      isDemoEvent: true,
+    };
+
+    // ============================================================
     //  OVERPASS QUERIES — Dar es Salaam
     // ============================================================
     const DAR_BBOX = '-7.3,38.8,-6.4,39.8';
@@ -201,39 +247,28 @@ async function showMap() {
     let activeMarkers = [];
     let map = null;
 
-    // Store current popup reference for dynamic updates
-    let currentPopup = null;
-    let currentPopupPlace = null;
-
     // ============================================================
-    //  FETCH FROM OVERPASS API
+    //  FETCH FROM OVERPASS PROXY (Vercel serverless function)
     // ============================================================
     async function fetchPlaces(categoryKey) {
       const cat = categories[categoryKey];
-      const url = 'https://overpass-api.de/api/interpreter';
 
       try {
-        const response = await fetch(url, {
+        // ✅ Call your Vercel proxy instead of Overpass directly
+        const response = await fetch('/api/overpass', {
           method: 'POST',
-          body: cat.query,
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'User-Agent': 'FlockApp/1.0 (contact@yourdomain.com)',
+            'Content-Type': 'application/json',
           },
+          body: JSON.stringify({ query: cat.query }),
         });
 
         if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`Overpass HTTP ${response.status} – ${text}`);
+          const errorData = await response.json();
+          throw new Error(`Proxy error: ${errorData.error || response.status}`);
         }
 
-        let data;
-        try {
-          data = await response.json();
-        } catch (jsonErr) {
-          const text = await response.text();
-          throw new Error(`Invalid JSON from Overpass: ${text.slice(0, 150)}`);
-        }
+        const data = await response.json();
 
         if (data.remark && data.remark.toLowerCase().includes('error')) {
           throw new Error(data.remark);
@@ -285,6 +320,22 @@ async function showMap() {
           });
         }
 
+        if (categoryKey === 'explore') {
+          // Inject both Hackathon and Job Interview (order: interview first, then hackathon)
+          results.unshift({
+            name: DEMO_JOB_INTERVIEW.name,
+            coords: DEMO_JOB_INTERVIEW.coords,
+            tags: DEMO_JOB_INTERVIEW.tags,
+            isDemoEvent: true,
+          });
+          results.unshift({
+            name: DEMO_HACKATHON.name,
+            coords: DEMO_HACKATHON.coords,
+            tags: DEMO_HACKATHON.tags,
+            isDemoEvent: true,
+          });
+        }
+
         return results.slice(0, 20);
       } catch (err) {
         console.error('Overpass fetch error:', err);
@@ -293,47 +344,47 @@ async function showMap() {
     }
 
     // ============================================================
-    //  BUILD POPUP HTML
+    //  BUILD POPUP HTML (using CSS classes for responsiveness)
     // ============================================================
     function buildEventPopupHTML(place, cat) {
       const attendees = place.tags.attendees || [];
       const attendeeList = attendees.map(a =>
-        `<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid #f5ede5;font-size:0.8rem;">
+        `<div class="flock-attendee-item">
           <span>${a.emoji || '👤'}</span>
-          <span style="font-weight:500;">${a.name}</span>
+          <span>${a.name}</span>
         </div>`
       ).join('');
+
+      // Determine location label based on coords or name
+      let locationLabel = 'Dar es Salaam';
+      if (place.name.includes('Mbweni')) locationLabel = 'Mbweni Beach';
+      else if (place.name.includes('UDSM') || place.name.includes('Hackathon')) locationLabel = 'UDSM';
+      else if (place.name.includes('Posta') || place.name.includes('Interview')) locationLabel = 'Posta';
 
       return `
         <div class="flock-popup-inner">
           <div class="flock-popup-bar" style="background:${cat.color}"></div>
-          <div class="flock-popup-title" style="font-size:1.1rem;">${place.name}</div>
-          <div class="flock-popup-loc">📍 Mbweni Beach, Dar es Salaam</div>
+          <div class="flock-popup-title">${place.name}</div>
+          <div class="flock-popup-loc">📍 ${locationLabel}, Dar es Salaam</div>
 
-          <div style="padding:0 14px 6px;font-size:0.75rem;color:#4a4a4a;background:#fffaf5;border-radius:8px;margin:0 14px 6px;">
-            <div style="display:flex;gap:12px;padding:6px 0;border-bottom:1px solid #f0e8df;">
+          <div class="flock-popup-details">
+            <div class="flock-popup-detail-row">
               <span>📅 ${place.tags.date || 'N/A'}</span>
               <span>🕐 ${place.tags.time || 'N/A'}</span>
             </div>
-            <div style="padding:6px 0;font-size:0.7rem;color:#b0a098;">
-              ${place.tags.activity || ''}
-            </div>
+            <div class="flock-popup-activity">${place.tags.activity || ''}</div>
           </div>
 
-          <div style="padding:0 14px 6px;font-size:0.8rem;color:#4a4a4a;">
-            ${place.tags.description || ''}
-          </div>
+          <div class="flock-popup-desc">${place.tags.description || ''}</div>
 
-          <div style="padding:0 14px 10px;">
-            <div style="font-size:0.8rem;font-weight:600;color:#2d2d2d;margin-bottom:6px;">
-              👥 Attendees (${attendees.length})
-            </div>
-            <div id="attendee-list-${Date.now()}" style="background:#faf5f0;border-radius:8px;padding:6px 10px;max-height:120px;overflow-y:auto;">
+          <div class="flock-popup-attendees">
+            <div class="flock-popup-attendees-title">👥 Attendees (${attendees.length})</div>
+            <div id="attendee-list-${Date.now()}" class="flock-popup-attendee-list">
               ${attendeeList}
             </div>
           </div>
 
-          <button class="flock-popup-btn" style="background:${cat.color};width:calc(100% - 28px);margin:0 14px 12px;padding:10px;border-radius:10px;border:none;color:#fff;font-family:'Kalam',cursive;font-size:0.85rem;font-weight:700;cursor:pointer;"
+          <button class="flock-popup-btn" style="background:${cat.color};"
             onclick="window.flockJoinEvent('${place.name}', '${cat.color}')">
             🐦 Join this Event
           </button>
@@ -343,7 +394,7 @@ async function showMap() {
 
     function buildRestaurantPopupHTML(place, cat) {
       const menuHtml = place.tags.menu.map(m =>
-        `<div style="display:flex;justify-content:space-between;font-size:0.8rem;padding:2px 0;border-bottom:1px solid #f0e8df;">
+        `<div class="flock-menu-item">
           <span>${m.item}</span>
           <span style="color:#ff6b35;font-weight:600;">${m.price}</span>
         </div>`
@@ -354,9 +405,9 @@ async function showMap() {
           <div class="flock-popup-bar" style="background:${cat.color}"></div>
           <div class="flock-popup-title">${cat.emoji} ${place.name}</div>
           <div class="flock-popup-loc">📍 Dar es Salaam</div>
-          <div style="padding:0 14px 6px;font-size:0.75rem;color:#4a4a4a;">${place.tags.description || ''}</div>
-          <div style="padding:0 14px 10px;font-size:0.8rem;font-weight:600;color:#2d2d2d;">📋 Menu</div>
-          <div style="padding:0 14px 10px;">${menuHtml}</div>
+          <div class="flock-popup-desc">${place.tags.description || ''}</div>
+          <div class="flock-popup-menu-title">📋 Menu</div>
+          <div class="flock-popup-menu-list">${menuHtml}</div>
           <button class="flock-popup-btn" style="background:${cat.color};" onclick="window.flockJoinPlan('${place.name}')">
             🐦 Join this Plan
           </button>
@@ -379,7 +430,7 @@ async function showMap() {
           <div class="flock-popup-bar" style="background:${cat.color}"></div>
           <div class="flock-popup-title">${cat.emoji} ${place.name}</div>
           <div class="flock-popup-loc">📍 Dar es Salaam</div>
-          <div class="flock-popup-row"><span>${detail}</span></div>
+          <div class="flock-popup-desc">${detail}</div>
           <button class="flock-popup-btn" style="background:${cat.color}" onclick="window.flockJoinPlan('${place.name}')">Join a plan here</button>
         </div>
       `;
@@ -391,8 +442,6 @@ async function showMap() {
     function clearMarkers() {
       activeMarkers.forEach((m) => m.remove());
       activeMarkers = [];
-      currentPopup = null;
-      currentPopupPlace = null;
     }
 
     function addMarkers(places, categoryKey) {
@@ -412,7 +461,6 @@ async function showMap() {
         pin.style.borderColor = cat.color;
         pin.style.boxShadow = `0 0 0 3px ${cat.color}22, 0 4px 16px ${cat.color}55`;
 
-        // Different emoji for event vs regular
         if (place.isDemoEvent) {
           pin.textContent = '🎉';
         } else if (place.isDemo) {
@@ -424,7 +472,6 @@ async function showMap() {
         wrapper.appendChild(ring);
         wrapper.appendChild(pin);
 
-        // Build popup based on type
         let popupContent;
         if (place.isDemoEvent) {
           popupContent = buildEventPopupHTML(place, cat);
@@ -441,7 +488,7 @@ async function showMap() {
           className: 'flock-popup-wrap',
         }).setHTML(popupContent);
 
-        // Store popup reference for dynamic updates
+        // Store place data for dynamic updates
         if (place.isDemoEvent) {
           popup._placeData = place;
           popup._catColor = cat.color;
@@ -498,13 +545,21 @@ async function showMap() {
           displayName = `${place.name} ${i + 1}`;
         }
 
+        // Determine location label
+        let location = 'Dar es Salaam';
+        if (place.isDemoEvent) {
+          if (place.name.includes('Mbweni')) location = 'Mbweni Beach';
+          else if (place.name.includes('UDSM') || place.name.includes('Hackathon')) location = 'UDSM';
+          else if (place.name.includes('Posta') || place.name.includes('Interview')) location = 'Posta';
+        }
+
         card.innerHTML = `
           <div class="flock-card-accent-bar" style="background:${cat.color}"></div>
           <div class="flock-card-top">
             <div class="flock-card-emoji" style="background:${cat.color}18">${emoji}</div>
             <div>
               <div class="flock-card-title">${displayName}</div>
-              <div class="flock-card-loc">📍 ${place.isDemoEvent ? 'Mbweni Beach' : 'Dar es Salaam'}</div>
+              <div class="flock-card-loc">📍 ${location}</div>
             </div>
           </div>
           ${place.isDemoEvent ? `<div style="padding:0 14px 6px;font-size:0.65rem;color:#b0a098;">👥 ${place.tags.attendees?.length || 0} going</div>` : ''}
@@ -641,7 +696,6 @@ async function showMap() {
         return;
       }
 
-      // Find the event place data from active markers
       let targetMarker = null;
       let targetPlace = null;
       let targetIndex = -1;
@@ -661,47 +715,41 @@ async function showMap() {
         return;
       }
 
-      // Add user to attendees
       const newAttendee = { name: userName.trim(), emoji: '👤' };
       targetPlace.tags.attendees.push(newAttendee);
 
-      // Update popup content
-      const cat = categories.beach; // event is always in beach category
-      const newPopupHTML = buildEventPopupHTML(targetPlace, cat);
+      // Determine which category the event belongs to
+      let categoryKey = 'beach';
+      if (eventName.includes('Hackathon') || eventName.includes('Interview') || eventName.includes('Job')) {
+        categoryKey = 'explore';
+      }
+      const eventCat = categories[categoryKey];
+      const newPopupHTML = buildEventPopupHTML(targetPlace, eventCat);
       if (targetMarker && targetMarker._popup) {
         targetMarker._popup.setHTML(newPopupHTML);
       }
 
-      // Also update the sidebar card for this place
       const card = document.getElementById(`flock-card-${targetIndex}`);
       if (card) {
-        const countSpan = card.querySelector('.flock-card-loc');
-        if (countSpan) {
-          countSpan.textContent = `👥 ${targetPlace.tags.attendees.length} going`;
+        const locSpan = card.querySelector('.flock-card-loc');
+        if (locSpan) {
+          locSpan.textContent = `👥 ${targetPlace.tags.attendees.length} going`;
         }
       }
 
-      // Update the global count
-      const countEl = document.getElementById('flock-active-count');
-      if (countEl) {
-        // Force update by re-rendering the sidebar
-        // We'll just update the specific card
-        const container = document.getElementById('flock-plans-list');
-        const cards = container.querySelectorAll('.flock-plan-card');
-        cards.forEach((c, idx) => {
-          if (idx === targetIndex) {
-            const locSpan = c.querySelector('.flock-card-loc');
-            if (locSpan) {
-              locSpan.textContent = `👥 ${targetPlace.tags.attendees.length} going`;
-            }
+      const container = document.getElementById('flock-plans-list');
+      const cards = container.querySelectorAll('.flock-plan-card');
+      cards.forEach((c, idx) => {
+        if (idx === targetIndex) {
+          const locSpan = c.querySelector('.flock-card-loc');
+          if (locSpan) {
+            locSpan.textContent = `👥 ${targetPlace.tags.attendees.length} going`;
           }
-        });
-      }
+        }
+      });
 
-      // Show success message
       alert(`🎉 ${userName} joined the ${eventName}! See you there!`);
 
-      // Open the popup to show updated list
       if (targetMarker) {
         targetMarker.togglePopup();
       }
@@ -750,7 +798,9 @@ async function showMap() {
     console.log('✅ Flock map is alive and loaded!');
     console.log('🎉 Demo features:');
     console.log('  🍽️  The Waterfront Restaurant (Food category)');
-    console.log('  🎉  Mbweni Beach Sunset Gathering (Beach category)');
+    console.log('  🌅  Mbweni Beach Sunset Gathering (Beach category)');
+    console.log('  💻  UDSM Hackathon 2026 (Explore category)');
+    console.log('  💼  Job Interview – Posta (Explore category)');  // ← NEW
   } catch (err) {
     console.error('❌ Flock map failed:', err);
   }
