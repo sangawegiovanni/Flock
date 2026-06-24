@@ -261,3 +261,453 @@ body {
         max-width: 100%;
     }
 }
+/* Minimalist, Elegant Map Feature Link */
+.map-nav-container {
+    text-align: center;
+    margin: 50px auto 30px;
+    padding: 0 15px;
+}
+
+.map-nav-btn {
+    font-family: 'Kalam', cursive;
+    font-size: 0.85rem;          /* Very small text size */
+    font-weight: 400;
+    display: inline-block;
+    padding: 6px 14px;           /* Tight, small padding padding */
+    background: transparent;      /* No loud background color */
+    color: #a0a0a0;              /* Faded, subtle gray text */
+    text-decoration: none;
+    border: 1px solid #e0e0e0;   /* Thin, elegant border */
+    border-radius: 20px;         /* Rounded pill style */
+    letter-spacing: 0.5px;
+    transition: all 0.4s ease;   /* Smooth color transition */
+    opacity: 0.7;                /* Blends softly into the page background */
+}
+
+.map-nav-btn:hover {
+    opacity: 1;
+    color: #ff6b35;              /* Subtle switch to your brand accent orange */
+    border-color: #ff6b35;       /* Border turns orange */
+    box-shadow: 0 2px 10px rgba(255, 107, 53, 0.15); /* Soft, stylish glow */
+    transform: translateY(-1px);
+}
+/* This only activates on map.html and safely ignores index.html */
+#map {
+    display: block !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 0 !important;
+    background-color: #e5e3df !important;
+}
+/* ── FLOCK MAP PAGE ─────────────────────────────── */
+
+
+#flock-sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 320px;
+  z-index: 1000;
+  background: rgba(250, 244, 235, 0.96);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 107, 53, 0.15);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding-top: 0;
+  font-family: 'Kalam', cursive;
+}
+
+#flock-sidebar.flock-sidebar-open {
+  transform: translateX(0);
+}
+
+.flock-sidebar-hero {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 60%, #ffcc00 100%);
+  padding: 28px 22px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.flock-sidebar-hero::after {
+  content: '🌍';
+  position: absolute;
+  right: -10px; bottom: -10px;
+  font-size: 5rem;
+  opacity: 0.15;
+}
+
+.flock-sidebar-hero h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.flock-sidebar-hero p {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.85);
+  margin-top: 4px;
+}
+
+.flock-chips {
+  display: flex;
+  gap: 7px;
+  padding: 14px 16px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255, 107, 53, 0.08);
+  background: rgba(255,248,240,0.8);
+}
+
+.flock-chip {
+  padding: 5px 13px;
+  border-radius: 20px;
+  font-family: 'Kalam', cursive;
+  font-size: 0.72rem;
+  border: 1px solid #e8d8c8;
+  color: #a08878;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.flock-chip:hover,
+.flock-chip.flock-chip-active {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(255, 107, 53, 0.3);
+  transform: translateY(-1px);
+}
+
+#flock-plans-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 14px 24px;
+  background: rgba(250,244,235,0.5);
+}
+
+#flock-plans-list::-webkit-scrollbar { width: 3px; }
+#flock-plans-list::-webkit-scrollbar-track { background: transparent; }
+#flock-plans-list::-webkit-scrollbar-thumb { background: rgba(255,107,53,0.2); border-radius: 4px; }
+
+.flock-plan-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 0;
+  margin-bottom: 10px;
+  border: 1px solid #f0e8df;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  overflow: hidden;
+  position: relative;
+}
+
+.flock-card-accent-bar {
+  height: 3px;
+  width: 100%;
+}
+
+.flock-plan-card:hover {
+  border-color: rgba(255,107,53,0.25);
+  box-shadow: 0 6px 20px rgba(255,107,53,0.12);
+  transform: translateY(-2px);
+}
+
+.flock-plan-card.flock-card-active {
+  border-color: #ff6b35;
+  box-shadow: 0 6px 24px rgba(255,107,53,0.18);
+}
+
+.flock-card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px 8px;
+}
+
+.flock-card-emoji {
+  font-size: 1.3rem;
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.flock-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  line-height: 1.3;
+}
+
+.flock-card-loc {
+  font-size: 0.7rem;
+  color: #ff6b35;
+  margin-top: 2px;
+}
+
+.flock-card-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.7rem;
+  color: #b0a098;
+  padding: 0 14px 8px;
+}
+
+.flock-card-btn {
+  width: calc(100% - 28px);
+  margin: 0 14px 12px;
+  padding: 7px;
+  border-radius: 9px;
+  background: transparent;
+  border: 1px solid;
+  font-family: 'Kalam', cursive;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.flock-card-btn:hover {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  border-color: transparent !important;
+  color: #fff !important;
+}
+
+/* Toggle button */
+#flock-toggle {
+  position: fixed;
+  top: 50%; left: 16px;
+  transform: translateY(-50%);
+  z-index: 1100;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(255,107,53,0.4), 0 0 0 4px rgba(255,107,53,0.1);
+  transition: left 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s;
+}
+
+#flock-toggle:hover {
+  box-shadow: 0 6px 28px rgba(255,107,53,0.5), 0 0 0 6px rgba(255,107,53,0.15);
+}
+
+#flock-toggle.flock-toggle-shifted {
+  left: 334px;
+}
+
+/* Bottom pill */
+#flock-pill {
+  position: fixed;
+  bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: rgba(250,244,235,0.96);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,107,53,0.2);
+  border-radius: 40px;
+  padding: 10px 22px;
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Kalam', cursive;
+  font-size: 0.78rem;
+  color: #a08878;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,107,53,0.08);
+  white-space: nowrap;
+}
+
+.flock-pill-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #ff6b35;
+  animation: flockPulse 2s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes flockPulse {
+  0%,100% { opacity:1; transform:scale(1); box-shadow: 0 0 0 0 rgba(255,107,53,0.4); }
+  50% { opacity:0.8; transform:scale(1.2); box-shadow: 0 0 0 6px rgba(255,107,53,0); }
+}
+
+#flock-active-count {
+  color: #ff6b35;
+  font-weight: 700;
+}
+
+/* Pin markers */
+.flock-pin-wrapper {
+  position: relative;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.flock-pin-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid;
+  opacity: 0.4;
+  animation: flockRing 2.5s ease-out infinite;
+}
+
+@keyframes flockRing {
+  0% { transform: scale(0.85); opacity: 0.5; }
+  70% { transform: scale(1.4); opacity: 0; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.flock-pin {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: #fffaf5;
+  border: 2.5px solid;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.flock-pin::after {
+  content: '';
+  position: absolute;
+  bottom: -9px; left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 9px solid currentColor;
+}
+
+.flock-pin-wrapper:hover .flock-pin {
+  transform: scale(1.18) translateY(-3px);
+}
+
+/* Popups */
+.flock-popup-wrap .mapboxgl-popup-content {
+  background: #fffaf5 !important;
+  border: 1px solid rgba(255,107,53,0.15) !important;
+  border-radius: 16px !important;
+  padding: 0 !important;
+  font-family: 'Kalam', cursive !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+  min-width: 220px;
+  overflow: hidden;
+}
+
+.flock-popup-wrap .mapboxgl-popup-tip {
+  border-top-color: #fffaf5 !important;
+}
+
+.flock-popup-wrap .mapboxgl-popup-close-button {
+  color: #a08878 !important;
+  font-size: 1.1rem !important;
+  padding: 8px !important;
+  z-index: 10;
+}
+
+.flock-popup-inner { padding: 0; }
+
+.flock-popup-bar {
+  height: 4px;
+  width: 100%;
+}
+
+.flock-popup-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  padding: 12px 14px 3px;
+}
+
+.flock-popup-loc {
+  font-size: 0.72rem;
+  color: #ff6b35;
+  padding: 0 14px 6px;
+}
+
+.flock-popup-row {
+  display: flex; gap: 12px;
+  font-size: 0.7rem;
+  color: #b0a098;
+  padding: 0 14px 6px;
+}
+
+.flock-popup-desc {
+  font-size: 0.75rem;
+  color: #4a4a4a;
+  line-height: 1.5;
+  padding: 0 14px 10px;
+  border-bottom: 1px solid #f0e8df;
+}
+
+.flock-popup-btn {
+  display: block;
+  width: calc(100% - 28px);
+  margin: 10px 14px 12px;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  color: #fff;
+  font-family: 'Kalam', cursive;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: opacity 0.2s;
+}
+
+.flock-popup-btn:hover { opacity: 0.88; }
+
+/* Mapbox overrides */
+.mapboxgl-ctrl-logo,
+.mapboxgl-ctrl-attrib { display: none !important; }
+
+.mapboxgl-ctrl-group {
+  background: rgba(250,244,235,0.95) !important;
+  border: 1px solid rgba(255,107,53,0.15) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+  overflow: hidden;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  #flock-sidebar { width: 88vw; }
+  #flock-toggle.flock-toggle-shifted { left: calc(88vw + 10px); }
+  #flock-pill { font-size: 0.7rem; padding: 8px 14px; bottom: 16px; }
+}
+#flock-mode-btn {
+  position: fixed;
+  top: 20px; right: 20px;
+  z-index: 1100;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: rgba(250,244,235,0.95);
+  border: 1px solid rgba(255,107,53,0.25);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+#flock-mode-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(255,107,53,0.25);
+  border-color: #ff6b35;
+}

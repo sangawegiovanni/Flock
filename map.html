@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flock Map</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+
+    <!-- Sidebar toggle -->
+    <button id="flock-toggle" onclick="flockToggleSidebar()">🐦</button>
+
+    <!-- Dark/Light mode toggle — fixed top right, always visible -->
+    <button id="flock-mode-btn" onclick="flockToggleMode()" title="Toggle dark mode">🌙</button>
+
+    <!-- Sidebar -->
+    <div id="flock-sidebar">
+      <div class="flock-sidebar-hero">
+        <h2>Plans in Dar 🌍</h2>
+        <p>Tap a plan · Find your crew · Head out</p>
+      </div>
+      <div class="flock-chips">
+        <button class="flock-chip flock-chip-active" onclick="flockFilter('beach', this)">🏖️ Beach</button>
+        <button class="flock-chip" onclick="flockFilter('food', this)">🍽️ Food</button>
+        <button class="flock-chip" onclick="flockFilter('cafe', this)">☕ Cafe</button>
+        <button class="flock-chip" onclick="flockFilter('park', this)">🌳 Parks</button>
+        <button class="flock-chip" onclick="flockFilter('explore', this)">🏛️ Explore</button>
+      </div>
+      <div id="flock-plans-list"></div>
+    </div>
+
+    <!-- Bottom pill -->
+    <div id="flock-pill">
+      <div class="flock-pill-dot"></div>
+      <span><span id="flock-active-count">0</span> spots found in Dar</span>
+    </div>
+
+    <div id="map"></div>
+    <script type="module" src="main.js"></script>
+
+  </body>
+</html>
