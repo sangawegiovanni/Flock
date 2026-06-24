@@ -1,263 +1,360 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+/* ==========================================
+NEW SECTIONS FOR UPDATED HTML
+========================================== */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+.navbar{
+position: fixed;
+top: 0;
+width: 100%;
+z-index: 1000;
+
+display: flex;
+justify-content: space-between;
+align-items: center;
+
+padding: 20px 40px;
+
+background: rgba(255,255,255,0.95);
+backdrop-filter: blur(12px);
+
+box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+
 }
 
-body {
-    font-family: 'Kalam', cursive;
-    line-height: 1.4;
-    color: #2d2d2d;
+.logo{
+font-family: 'Playfair Display', serif;
+font-size: 2rem;
+font-weight: 700;
+color: #ff6b35;
 }
 
-/* Landing Page Specific Styles */
-.hero-container {
-    max-width: 900px;
-    margin: -60px auto 0;
-    padding: 30px 15px;
-    position: relative;
-    z-index: 10;
+.nav-btn{
+font-family: 'Kalam', cursive;
+padding: 12px 24px;
+
+border: none;
+border-radius: 12px;
+
+background: linear-gradient(
+    135deg,
+    #ff6b35,
+    #f7931e,
+    #ffcc00
+);
+
+color: white;
+cursor: pointer;
+
 }
 
-.home-header {
-    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("Sunset_01.png");
-    background-size: cover;
-    background-position: center;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 15px;
-    position: relative;
+.hero{
+max-width: 1200px;
+margin: 100px auto 50px;
+
+padding: 40px 20px;
+
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 50px;
+
+align-items: center;
+
 }
 
-.main-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 5rem;
-    font-weight: 700;
-    color: #fff;
-    text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.4);
-    margin-bottom: 5px;
-    letter-spacing: -1px;
+.hero-left h1{
+font-family: 'Playfair Display', serif;
+font-size: 4rem;
+color: #ff6b35;
+margin-bottom: 20px;
 }
 
-.home-tagline {
-    font-family: 'Kalam', cursive;
-    font-size: 1.6rem;
-    color: #fff;
-    font-weight: 400;
-    letter-spacing: 0.5px;
+.hero-text{
+font-size: 1.2rem;
+margin-bottom: 30px;
+color: #4a4a4a;
 }
 
-.brief-intro {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 40px 50px;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(10px);
-    text-align: center;
+.launch-badge{
+display: inline-block;
+
+background: rgba(255,107,53,0.1);
+
+color: #ff6b35;
+
+padding: 10px 18px;
+
+border-radius: 50px;
+
+margin-bottom: 20px;
+
 }
 
-.brief-intro h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    color: #ff6b35;
-    margin-bottom: 15px;
-    font-weight: 600;
+.hero-buttons{
+display: flex;
+gap: 15px;
+flex-wrap: wrap;
 }
 
-.brief-sub {
-    font-size: 1.1rem;
-    color: #4a4a4a;
-    margin-bottom: 30px;
+.primary-btn,
+.secondary-btn{
+font-family: 'Kalam', cursive;
+
+padding: 15px 30px;
+
+border-radius: 12px;
+
+cursor: pointer;
+
+transition: 0.3s;
+
 }
 
-.explore-btn {
-    font-family: 'Kalam', cursive;
-    font-size: 1.2rem;
-    font-weight: 600;
-    padding: 18px 40px;
-    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffcc00 100%);
-    color: #fff;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+.primary-btn{
+border: none;
+
+color: white;
+
+background: linear-gradient(
+    135deg,
+    #ff6b35,
+    #f7931e,
+    #ffcc00
+);
+
 }
 
-.explore-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+.secondary-btn{
+background: white;
+border: 2px solid #ff6b35;
+color: #ff6b35;
 }
 
-.story-signup-zone {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 40px 50px;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(10px);
+.primary-btn:hover,
+.secondary-btn:hover{
+transform: translateY(-3px);
 }
 
-.hidden-element {
-    display: none;
+.hero-proof{
+margin-top: 20px;
+color: #777;
 }
 
-.story-box {
-    margin-bottom: 40px;
+.hero-right img{
+width: 100%;
+border-radius: 25px;
+
+box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+
 }
 
-.story-box p {
-    font-size: 1.1rem;
-    color: #4a4a4a;
-    margin-bottom: 15px;
-    line-height: 1.6;
+/* EXAMPLES */
+
+.examples-section{
+max-width: 1200px;
+margin: 80px auto;
+padding: 20px;
 }
 
-.orange-banner {
-    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffcc00 100%);
-    color: #fff !important;
-    padding: 20px 30px;
-    border-radius: 15px;
-    font-size: 1.2rem !important;
-    font-weight: 500;
-    font-style: italic;
-    text-align: center !important;
-    margin: 25px 0 !important;
-    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.25);
+.examples-section h2{
+text-align: center;
+
+font-family: 'Playfair Display', serif;
+
+color: #ff6b35;
+
+margin-bottom: 40px;
+
 }
 
-.signup-container {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 40px 50px;
-    margin-top: 30px;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
-    backdrop-filter: blur(10px);
-    text-align: center;
+.example-grid{
+display: grid;
+
+grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+
+gap: 25px;
+
 }
 
-.signup-container h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    color: #ff6b35;
-    margin-bottom: 10px;
-    font-weight: 600;
+.example-card{
+background: white;
+
+padding: 25px;
+
+border-radius: 20px;
+
+box-shadow:
+    0 10px 30px rgba(0,0,0,0.08);
+
+transition: 0.3s;
+
 }
 
-.signup-subtext {
-    font-family: 'Kalam', cursive;
-    font-size: 1.1rem;
-    color: #4a4a4a;
-    margin-bottom: 25px;
+.example-card:hover{
+transform: translateY(-5px);
 }
 
-.waitlist-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    max-width: 400px;
-    margin: 0 auto;
+.example-card h3{
+margin-bottom: 10px;
+color: #ff6b35;
 }
 
-.waitlist-form input {
-    font-family: 'Kalam', cursive;
-    font-size: 1rem;
+/* HOW IT WORKS */
+
+.how-it-works{
+max-width: 1200px;
+margin: 80px auto;
+padding: 20px;
+}
+
+.how-it-works h2{
+text-align: center;
+
+font-family: 'Playfair Display', serif;
+
+color: #ff6b35;
+
+margin-bottom: 40px;
+
+}
+
+.steps{
+display: grid;
+
+grid-template-columns:
+    repeat(auto-fit,minmax(280px,1fr));
+
+gap: 25px;
+
+}
+
+.step-card{
+background: white;
+
+padding: 30px;
+
+border-radius: 20px;
+
+text-align: center;
+
+box-shadow:
+    0 10px 30px rgba(0,0,0,0.08);
+
+}
+
+.step-card span{
+font-size: 2rem;
+font-weight: bold;
+color: #ff6b35;
+}
+
+.step-card h3{
+margin: 15px 0;
+}
+
+/* STORY */
+
+.story-section{
+max-width: 900px;
+
+margin: 80px auto;
+
+padding: 50px;
+
+background: white;
+
+border-radius: 20px;
+
+box-shadow:
+    0 15px 40px rgba(0,0,0,0.08);
+
+text-align: center;
+
+}
+
+.story-section h2{
+font-family: 'Playfair Display', serif;
+
+color: #ff6b35;
+
+margin-bottom: 25px;
+
+}
+
+.story-section p{
+margin-bottom: 15px;
+}
+
+.story-highlight{
+font-size: 1.2rem;
+font-weight: bold;
+color: #ff6b35;
+}
+
+/* WAITLIST */
+
+.waitlist-section{
+max-width: 900px;
+margin: 80px auto;
+padding: 20px;
+}
+
+.waitlist-box{
+background: white;
+
+border-radius: 20px;
+
+padding: 50px;
+
+text-align: center;
+
+box-shadow:
+    0 15px 40px rgba(0,0,0,0.08);
+
+}
+
+/* FOOTER */
+
+footer{
+text-align: center;
+
+padding: 40px 20px;
+
+margin-top: 60px;
+
+color: #666;
+
+}
+
+footer h3{
+font-family: 'Playfair Display', serif;
+color: #ff6b35;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.navbar{
     padding: 15px 20px;
-    border: 2px solid #ffe4d1;
-    border-radius: 12px;
-    background: #fff;
-    color: #2d2d2d;
-    transition: all 0.3s ease;
 }
 
-.waitlist-form input:focus {
-    outline: none;
-    border-color: #ff6b35;
-    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-}
-
-.waitlist-form button {
-    font-family: 'Kalam', cursive;
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding: 15px 30px;
-    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffcc00 100%);
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
-}
-
-.waitlist-form button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 35px rgba(255, 107, 53, 0.4);
-}
-
-.waitlist-form button:active {
-    transform: translateY(0);
-}
-
-#formResponse {
-    font-family: 'Kalam', cursive;
-    font-size: 1rem;
-    padding: 12px 20px;
-    border-radius: 10px;
+.hero{
+    grid-template-columns: 1fr;
     text-align: center;
-    animation: fadeIn 0.3s ease-out;
 }
 
-.waitlist-form button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
+.hero-left h1{
+    font-size: 2.8rem;
 }
 
-@media (max-width: 768px) {
-    .main-logo {
-        font-size: 3.5rem;
-    }
-    
-    .home-tagline {
-        font-size: 1.2rem;
-    }
-    
-    .hero-container {
-        padding: 30px 15px;
-    }
-    
-    .brief-intro,
-    .story-signup-zone {
-        padding: 30px 25px;
-    }
-    
-    .brief-intro h2 {
-        font-size: 1.5rem;
-    }
-    
-    .story-box p {
-        font-size: 1rem;
-    }
-    
-    .orange-banner {
-        font-size: 1rem !important;
-        padding: 15px 20px;
-    }
-    
-    .signup-container {
-        padding: 30px 25px;
-    }
-    
-    .signup-container h3 {
-        font-size: 1.5rem;
-    }
-    
-    .waitlist-form {
-        max-width: 100%;
-    }
+.hero-buttons{
+    justify-content: center;
+}
+
+.story-section,
+.waitlist-box{
+    padding: 30px;
+}
+
 }
