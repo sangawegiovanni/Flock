@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Flock Map</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
 
-    <!-- Sidebar toggle -->
     <button id="flock-toggle" onclick="flockToggleSidebar()">🐦</button>
-
-    <!-- Dark/Light mode toggle — fixed top right, always visible -->
     <button id="flock-mode-btn" onclick="flockToggleMode()" title="Toggle dark mode">🌙</button>
 
-    <!-- Sidebar -->
     <div id="flock-sidebar">
       <div class="flock-sidebar-hero">
         <h2>Plans in Dar 🌍</h2>
@@ -28,7 +27,6 @@
       <div id="flock-plans-list"></div>
     </div>
 
-    <!-- Bottom pill -->
     <div id="flock-pill">
       <div class="flock-pill-dot"></div>
       <span><span id="flock-active-count">0</span> spots found in Dar</span>
